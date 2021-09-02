@@ -182,6 +182,7 @@ Swoole\Coroutine\run(function () use ($grpc) {
 通过 IP 端口调用 gRPC 服务
 
 ```php
+
 $client    = new Mix\Grpc\Client('127.0.0.1', 9595);
 
 $say  = new Php\Micro\Grpc\Greeter\SayClient($client);
@@ -191,6 +192,17 @@ $ctx = new Mix\Grpc\Context();
 $response = $say->Hello($ctx, $request);
 
 var_dump($response->getMsg());
+
+//下面是例子:
+\Swoole\Coroutine\run(function (){
+    $client = new Client("127.0.0.1",9595);
+    $say  = new \Php\Micro\Grpc\Greeter\SayClient($client);
+    $argsSay = new Request();
+    $argsSay->setName("xiaoming");
+    $ctx = new Context();
+    $response = $say->Hello($ctx,$argsSay);
+    var_dump($response->getMsg());
+});
 ```
 
 设置 `header`
