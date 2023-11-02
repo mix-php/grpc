@@ -23,6 +23,7 @@
 package php
 
 import (
+	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/protoc-gen-go/descriptor"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 )
@@ -30,6 +31,7 @@ import (
 // Generate generates needed service classes
 func Generate(req *plugin.CodeGeneratorRequest) *plugin.CodeGeneratorResponse {
 	resp := &plugin.CodeGeneratorResponse{}
+	resp.SupportedFeatures = proto.Uint64(uint64(plugin.CodeGeneratorResponse_FEATURE_PROTO3_OPTIONAL))
 
 	for _, file := range req.ProtoFile {
 		for _, service := range file.Service {
@@ -37,11 +39,11 @@ func Generate(req *plugin.CodeGeneratorRequest) *plugin.CodeGeneratorResponse {
 		}
 	}
 
-    for _, file := range req.ProtoFile {
-        for _, service := range file.Service {
-            resp.File = append(resp.File, generate1(req, file, service))
-        }
-    }
+	for _, file := range req.ProtoFile {
+		for _, service := range file.Service {
+			resp.File = append(resp.File, generate1(req, file, service))
+		}
+	}
 
 	return resp
 }
@@ -58,14 +60,14 @@ func generate(
 }
 
 func generate1(
-    req *plugin.CodeGeneratorRequest,
-    file *descriptor.FileDescriptorProto,
-    service *descriptor.ServiceDescriptorProto,
+	req *plugin.CodeGeneratorRequest,
+	file *descriptor.FileDescriptorProto,
+	service *descriptor.ServiceDescriptorProto,
 ) *plugin.CodeGeneratorResponse_File {
-    return &plugin.CodeGeneratorResponse_File{
-        Name:    str(filename1(file, service.Name)),
-        Content: str(body1(req, file, service)),
-    }
+	return &plugin.CodeGeneratorResponse_File{
+		Name:    str(filename1(file, service.Name)),
+		Content: str(body1(req, file, service)),
+	}
 }
 
 // helper to convert string into string pointer
