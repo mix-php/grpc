@@ -45,7 +45,7 @@ use Mix\Grpc\Context;
 use {{ $n }};
 {{- end}}
 
-class {{ .Service.Name | client }} extends Grpc\Client\AbstractClient
+class {{ .Service.Name | client }} extends Grpc\Client\AbstractClient implements  {{ .Service.Name | interface }}
 {
 {{- range $m := .Service.Method}}
     /**
@@ -70,6 +70,9 @@ func init() {
 	tpl1 = template.Must(template.New("phpBody1").Funcs(template.FuncMap{
 		"client": func(name *string) string {
 			return identifier(*name, "Client")
+		},
+		"interface": func(name *string) string {
+			return identifier(*name, "interface")
 		},
 		"name": func(ns *ns, name *string) string {
 			return ns.resolve(name)
